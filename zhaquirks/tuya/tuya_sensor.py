@@ -117,6 +117,17 @@ class NoManufTimeTuyaMCUCluster(TuyaMCUCluster):
 )
 
 
+(
+    TuyaQuirkBuilder("_TZE284_hdyjyqjm", "TS0601")  # Novadigital STU-ZB/STU-ZBD
+    .tuya_temperature(dp_id=1, scale=10)
+    .tuya_humidity(dp_id=2)
+    .tuya_battery(dp_id=4)
+    .tuya_enchantment(data_query_spell=True)
+    .skip_configuration()
+    .add_to_registry()
+)
+
+
 # TH01Z - Temperature and humidity sensor with clock
 (
     TuyaQuirkBuilder("_TZE200_lve3dvpy", "TS0601")
