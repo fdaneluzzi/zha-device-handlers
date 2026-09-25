@@ -365,10 +365,99 @@ class GiexIrrigationStatus(t.enum8):
 
 (
     TuyaQuirkBuilder("_TZE284_8zizsafo", "TS0601")  # Giex GX04
-    .applies_to("_TZE284_iilebqoo", "TS0601")  # NovaDigital ZVL_DUAL
     .applies_to("_TZE284_eaet5qt5", "TS0601")  # Insoma SGW08W
     .applies_to("_TZE284_fhvpaltk", "TS0601")  # SGW08
     .tuya_battery(dp_id=59, battery_type=BatterySize.AA, battery_qty=4)
+    .tuya_switch(
+        dp_id=1,
+        attribute_name="valve_on_off_1",
+        entity_type=EntityType.STANDARD,
+        translation_key="valve_on_off_1",
+        fallback_name="Valve 1",
+    )
+    .tuya_switch(
+        dp_id=2,
+        attribute_name="valve_on_off_2",
+        entity_type=EntityType.STANDARD,
+        translation_key="valve_on_off_2",
+        fallback_name="Valve 2",
+    )
+    .tuya_number(
+        dp_id=13,
+        attribute_name="valve_countdown_1",
+        type=t.uint16_t,
+        device_class=SensorDeviceClass.DURATION,
+        unit=UnitOfTime.MINUTES,
+        min_value=0,
+        max_value=1440,
+        step=1,
+        translation_key="valve_countdown_1",
+        fallback_name="Irrigation time 1",
+    )
+    .tuya_number(
+        dp_id=14,
+        attribute_name="valve_countdown_2",
+        type=t.uint16_t,
+        device_class=SensorDeviceClass.DURATION,
+        unit=UnitOfTime.MINUTES,
+        min_value=0,
+        max_value=1440,
+        step=1,
+        translation_key="valve_countdown_2",
+        fallback_name="Irrigation time 2",
+    )
+    .tuya_sensor(
+        dp_id=25,
+        attribute_name="valve_duration_1",
+        type=t.uint32_t,
+        state_class=SensorStateClass.MEASUREMENT,
+        device_class=SensorDeviceClass.DURATION,
+        unit=UnitOfTime.SECONDS,
+        entity_type=EntityType.STANDARD,
+        translation_key="irrigation_duration_1",
+        fallback_name="Irrigation duration 1",
+    )
+    .tuya_sensor(
+        dp_id=26,
+        attribute_name="valve_duration_2",
+        type=t.uint32_t,
+        state_class=SensorStateClass.MEASUREMENT,
+        device_class=SensorDeviceClass.DURATION,
+        unit=UnitOfTime.SECONDS,
+        entity_type=EntityType.STANDARD,
+        translation_key="irriation_duration_2",
+        fallback_name="Irrigation duration 2",
+    )
+    .tuya_enum(
+        dp_id=104,
+        attribute_name="valve_status_1",
+        enum_class=GiexIrrigationStatus,
+        entity_platform=EntityPlatform.SENSOR,
+        entity_type=EntityType.STANDARD,
+        translation_key="valve_status_1",
+        fallback_name="Status 1",
+    )
+    .tuya_enum(
+        dp_id=105,
+        attribute_name="valve_status_2",
+        enum_class=GiexIrrigationStatus,
+        entity_platform=EntityPlatform.SENSOR,
+        entity_type=EntityType.STANDARD,
+        translation_key="valve_status_2",
+        fallback_name="Status 2",
+    )
+    .skip_configuration()
+    .add_to_registry()
+)
+
+
+(
+    # Split from the _TZE284_8zizsafo (Giex GX04) family: this variant does
+    # not send its battery status on dp=59 (confirmed against live traffic -
+    # the dp never appears, even while actively toggling valves), so it is
+    # kept separate to avoid showing a permanently stale battery percentage.
+    # TODO: find the correct battery dp for this variant and add it back.
+    TuyaQuirkBuilder("_TZE284_iilebqoo", "TS0601")  # NovaDigital ZVL_DUAL
     .tuya_switch(
         dp_id=1,
         attribute_name="valve_on_off_1",
