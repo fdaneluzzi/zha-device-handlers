@@ -447,6 +447,7 @@ class GiexIrrigationStatus(t.enum8):
         translation_key="valve_status_2",
         fallback_name="Status 2",
     )
+    .tuya_enchantment(data_query_spell=True)
     .skip_configuration()
     .add_to_registry()
 )
